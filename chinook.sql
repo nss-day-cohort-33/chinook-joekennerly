@@ -114,10 +114,53 @@ JOIN Genre AS g ON g.GenreId = t.GenreId;
 
 -- 17. Provide a query that shows all Invoices but includes the # of invoice line items.
 
-SELECT i.InvoiceId, COUNT(il.InvoiceLineId)
+SELECT i.InvoiceId, COUNT(il.InvoiceId)
 FROM Invoice AS i
-JOIN InvoiceLine AS il ON il.InvoiceId = i.InvoiceId;
+JOIN InvoiceLine AS il ON il.InvoiceId = i.InvoiceId
+GROUP BY i.InvoiceId;
 
+-- 18. Provide a query that shows total sales made by each sales agent.
+
+SELECT e.FirstName || ' ' || e.LastName as fullName, SUM(i.Total) as totalSales
+FROM Employee AS e
+JOIN Customer AS c ON c.SupportRepId = e.EmployeeId
+JOIN Invoice AS i ON i.CustomerId = c.CustomerId
+WHERE e.Title = "Sales Support Agent"
+GROUP BY fullName;
+
+-- 19. Which sales agent made the most in sales in 2009?
+
+SELECT FirstName, MAX(totalSales)
+FROM (SELECT e.FirstName, SUM(i.Total) AS totalSales
+FROM Employee AS e
+JOIN Customer AS c ON c.SupportRepId = e.EmployeeId
+JOIN Invoice AS i ON i.CustomerId = c.CustomerId
+WHERE i.InvoiceDate > "2009-01-01"
+AND i.InvoiceDate < "2009-12-31" 
+GROUP BY e.FirstName);
+
+-- 20. Which sales agent made the most in sales over all?
+
+SELECT FirstName, MAX(totalSales)
+FROM (SELECT e.FirstName, SUM(i.Total) AS totalSales
+FROM Employee AS e
+JOIN Customer AS c ON c.SupportRepId = e.EmployeeId
+JOIN Invoice AS i ON i.CustomerId = c.CustomerId
+GROUP BY e.FirstName);
+
+-- 21. Provide a query that shows the count of customers assigned to each sales agent.
+
+SELECT e.FirstName, COUNT(c.CustomerId)
+FROM Employee AS e
+JOIN Customer AS c ON c.SupportRepId = e.EmployeeId
+GROUP BY e.FirstName;
+
+-- 22. Provide a query that shows the total sales per country.
+SELECT BillingCountry, ROUND(field, 2) AS totalSales
+FROM (SELECT i.BillingCountry, SUM(i.Total) AS field 
+FROM Invoice AS i
+GROUP BY i.BillingCountry)
+;
 
 
 SELECT * FROM Track;

@@ -56,9 +56,56 @@ AND i.InvoiceDate < "2011-12-31";
 
 -- 9. What are the respective total sales for each of those years?
 
+SELECT SUM(i.Total) as "Total from 2009"
+FROM Invoice as i
+WHERE i.InvoiceDate > "2009-01-01"
+AND i.InvoiceDate < "2009-12-31";
 
+SELECT SUM(i.Total) as "Total from 2011"
+FROM Invoice as i
+WHERE i.InvoiceDate > "2011-01-01"
+AND i.InvoiceDate < "2011-12-31";
 
+-- 10. Looking at the InvoiceLine table, provide a query that COUNTs the number of line items for Invoice ID 37.
 
+SELECT COUNT(*) as "Count for 37"
+FROM InvoiceLine as i
+WHERE i.InvoiceId = 37;
+
+-- 11. Looking at the InvoiceLine table, provide a query that COUNTs the number of line items for each Invoice
+
+SELECT il.InvoiceId, COUNT(il.InvoiceId)
+FROM InvoiceLine as il;
+GROUP BY il.InvoiceId;
+
+-- 12. Provide a query that includes the purchased track name with each invoice line item
+
+SELECT il.InvoiceId, t.Name
+FROM InvoiceLine AS il
+JOIN Track AS t ON t.TrackId = il.TrackId;
+
+-- 13. Provide a query that includes the purchased track name AND artist name with each invoice line item.
+
+SELECT il.InvoiceId, t.Name, ar.Name
+FROM InvoiceLine AS il
+JOIN Track AS t ON t.TrackId = il.TrackId
+JOIN Album AS a ON a.AlbumId = t.AlbumId
+JOIN Artist AS ar ON ar.ArtistId = a.ArtistId;
+
+-- 14. Provide a query that shows the # of invoices per country
+
+SELECT i.BillingCountry ,COUNT(*) AS InvoiceNum
+FROM Invoice AS i
+GROUP BY i.BillingCountry;
+
+-- 15. Provide a query that shows the total number of tracks in each playlist. The Playlist name should be include on the resulant table.
+
+SELECT p.Name, COUNT(pt.TrackId)
+FROM PlaylistTrack AS pt
+JOIN Playlist AS p ON p.PlaylistId = pt.PlaylistId
+GROUP BY p.PlaylistId;
+
+-- 16. Provide a query that shows all the Tracks, but displays no IDs. The result should include the Album name, Media type and Genre.
 
 
 

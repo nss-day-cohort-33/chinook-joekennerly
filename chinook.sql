@@ -28,8 +28,7 @@ SELECT DISTINCT i.BillingCountry FROM Invoice as i;
 SELECT i.InvoiceId, e.FirstName || ' ' || e.LastName as fullName
 FROM Invoice as i
 JOIN Customer as c ON i.CustomerId = c.CustomerId
-JOIN Employee as e ON e.EmployeeId = c.SupportRepId
-;
+JOIN Employee as e ON e.EmployeeId = c.SupportRepId;
 
 -- 7. Provide a query that shows the Invoice Total, Customer name, Country and Sale Agent name for all invoices and customers.
 
@@ -106,6 +105,18 @@ JOIN Playlist AS p ON p.PlaylistId = pt.PlaylistId
 GROUP BY p.PlaylistId;
 
 -- 16. Provide a query that shows all the Tracks, but displays no IDs. The result should include the Album name, Media type and Genre.
+
+SELECT t.Name AS track, a.Title AS album, mt.Name AS mediatype, g.Name AS genre
+FROM Track AS t
+JOIN Album AS a ON a.AlbumId = t.AlbumId
+JOIN MediaType AS mt ON mt.MediaTypeId = t.MediaTypeId
+JOIN Genre AS g ON g.GenreId = t.GenreId;
+
+-- 17. Provide a query that shows all Invoices but includes the # of invoice line items.
+
+SELECT i.InvoiceId, COUNT(il.InvoiceLineId)
+FROM Invoice AS i
+JOIN InvoiceLine AS il ON il.InvoiceId = i.InvoiceId;
 
 
 
